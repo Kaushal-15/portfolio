@@ -8,94 +8,188 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
         :root {
             --primary: #6366f1;
             --secondary: #8b5cf6;
             --bg-color: #f8fafc;
             --text-color: #1e293b;
             --card-bg: #ffffff;
+            --nav-bg: #ffffff;
+            --footer-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
+        
         .dark {
+            --primary: #818cf8;
+            --secondary: #a78bfa;
             --bg-color: #0f172a;
             --text-color: #e2e8f0;
             --card-bg: #1e293b;
+            --nav-bg: #1e293b;
+            --footer-bg: #1e293b;
+            --border-color: #334155;
         }
+        
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
         .gradient-text {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
+        
+        .gradient-bg {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
         .skill-badge {
             transition: all 0.3s ease;
             background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
+        
         .skill-badge:hover {
             transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
+        
         .project-card {
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
+        
         .project-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
+        
         .theme-toggle {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
+        
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+        
         #profile-img {
             display: none;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
         }
+        
         .profile-container:hover #profile-img {
             display: block;
+            transform: scale(1);
         }
+        
         .profile-container:hover .default-icon {
             display: none;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-outline {
+            transition: all 0.3s ease;
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            transform: translateY(-2px);
+            background-color: rgba(99, 102, 241, 0.1);
         }
     </style>
 </head>
 <body class="min-h-screen">
-    <header class="py-6 px-4 sm:px-10 bg-white dark:bg-slate-800 shadow-sm">
+    <header class="py-6 px-4 sm:px-10 bg-[var(--nav-bg)] shadow-sm sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold gradient-text">Kaushal S</h1>
+            <h1 class="text-2xl font-bold gradient-text">S.Kaushal</h1>
             <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
-                <a href="#skills" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Skills</a>
-                <a href="#projects" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
-                <a href="#contact" class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+                <a href="#about" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+                <a href="#skills" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Skills</a>
+                <a href="#projects" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
+                <a href="#contact" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
             </nav>
             <div class="flex items-center space-x-4">
                 <button id="theme-toggle" class="w-10 h-10 rounded-full theme-toggle flex items-center justify-center">
-                    <i class="fas fa-moon" id="theme-icon"></i>
+                    <i class="fas fa-moon text-indigo-600 dark:text-yellow-300" id="theme-icon"></i>
                 </button>
-                <button class="md:hidden text-slate-600 dark:text-slate-300">
+                <button id="mobile-menu-button" class="md:hidden text-slate-600 dark:text-slate-300">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-[var(--nav-bg)] mt-4">
+            <div class="flex flex-col space-y-3 py-4">
+                <a href="#about" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-4 py-2">About</a>
+                <a href="#skills" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-4 py-2">Skills</a>
+                <a href="#projects" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-4 py-2">Projects</a>
+                <a href="#contact" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-4 py-2">Contact</a>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-4 sm:px-10 py-12">
         <section class="flex flex-col md:flex-row items-center justify-between gap-10 mb-20">
-            <div class="md:w-1/2">
+            <div class="md:w-1/2 order-2 md:order-1">
                 <h2 class="text-4xl sm:text-5xl font-bold mb-4 dark:text-white">Tech Enthusiast | <span class="gradient-text">Web Developer</span> | Future Engineer</h2>
                 <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">I build digital experiences that are fast, accessible, and visually appealing.</p>
-                <div class="flex space-x-4">
-                    <a href="#contact" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">Contact Me</a>
-                    <a href="kaushal_resume.pdf" download class="border border-indigo-600 text-indigo-600 dark:text-indigo-400 px-6 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-700 transition">Download Resume</a>
+                <div class="flex space-x-4"> 
+                    <a href="#contact" class="btn-primary text-white px-6 py-3 rounded-lg transition">Contact Me</a>
+                    <a href="S.Kaushal-Resume.pdf" download class="btn-outline text-indigo-600 dark:text-indigo-400 px-6 py-3 rounded-lg transition">Download Resume</a>
                 </div>
             </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="profile-container w-64 h-64 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 flex items-center justify-center overflow-hidden shadow-lg relative">
+            <div class="md:w-1/2 flex justify-center order-1 md:order-2 mb-8 md:mb-0">
+                <div class="profile-container w-64 h-64 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 flex items-center justify-center overflow-hidden shadow-lg relative hover:shadow-xl transition-shadow duration-300">
                     <img id="profile-img" src="profile.jpeg" alt="Kaushal S" class="w-full h-full object-cover">
                     <i class="fas fa-user-circle text-8xl text-indigo-400 dark:text-indigo-300 default-icon"></i>
                 </div>
@@ -103,49 +197,75 @@
         </section>
 
         <section id="about" class="mb-20">
-            <h2 class="text-3xl font-bold mb-6 gradient-text">About Me</h2>
-            <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm">
+            <h2 class="text-3xl font-bold mb-6 gradient-text inline-block">About Me</h2>
+            <div class="bg-[var(--card-bg)] p-8 rounded-xl shadow-sm border border-[var(--border-color)]">
                 <p class="text-lg text-slate-700 dark:text-slate-300 mb-4">I'm currently pursuing a Diploma in Computer Technology at Kongu Polytechnic College, passionate about Web Development, Flutter apps, and building innovative digital products.</p>
                 <p class="text-lg text-slate-700 dark:text-slate-300">I love combining creativity with technology to bring ideas to life. Always learning, always building.</p>
             </div>
         </section>
 
         <section id="skills" class="mb-20">
-            <h2 class="text-3xl font-bold mb-8 gradient-text">Skills</h2>
+            <h2 class="text-3xl font-bold mb-8 gradient-text inline-block">Skills</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
-                    <i class="fab fa-flutter text-3xl text-blue-400 mb-2"></i>
-                    <span class="font-medium">Flutter</span>
-                </div>
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
-                    <i class="fab fa-react text-3xl text-blue-500 mb-2"></i>
-                    <span class="font-medium">React.js</span>
-                </div>
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
-                    <i class="fas fa-wind text-3xl text-teal-400 mb-2"></i>
-                    <span class="font-medium">TailwindCSS</span>
-                </div>
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
-                    <i class="fab fa-python text-3xl text-yellow-500 mb-2"></i>
-                    <span class="font-medium">Python (DSA)</span>
-                </div>
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
                     <i class="fab fa-html5 text-3xl text-orange-500 mb-2"></i>
                     <span class="font-medium">HTML/CSS</span>
                 </div>
-                <div class="skill-badge p-4 rounded-lg shadow-sm flex flex-col items-center">
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-js-square text-3xl text-yellow-400 mb-2"></i>
+                    <span class="font-medium">JavaScript</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fas fa-wind text-3xl text-teal-400 mb-2"></i>
+                    <span class="font-medium">TailwindCSS</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-react text-3xl text-blue-500 mb-2"></i>
+                    <span class="font-medium">React.js</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-node-js text-3xl text-green-500 mb-2"></i>
+                    <span class="font-medium">Node.js</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fas fa-server text-3xl text-green-600 mb-2"></i>
+                    <span class="font-medium">Express.js</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fas fa-database text-3xl text-green-700 mb-2"></i>
+                    <span class="font-medium">MongoDB</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fas fa-docker text-3xl text-blue-700 mb-2"></i>
+                    <span class="font-medium">Docker</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-python text-3xl text-yellow-500 mb-2"></i>
+                    <span class="font-medium">Python</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-cuttlefish text-3xl text-blue-600 mb-2"></i>
+                    <span class="font-medium">C++ (DSA)</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
                     <i class="fab fa-git-alt text-3xl text-red-500 mb-2"></i>
                     <span class="font-medium">Git & GitHub</span>
+                </div>
+                <div class="skill-badge p-4 rounded-lg flex flex-col items-center">
+                    <i class="fab fa-flutter text-3xl text-blue-400 mb-2"></i>
+                    <span class="font-medium">Flutter</span>
                 </div>
             </div>
         </section>
 
         <section id="projects" class="mb-20">
-            <h2 class="text-3xl font-bold mb-8 gradient-text">Projects</h2>
+            <h2 class="text-3xl font-bold mb-8 gradient-text inline-block">Projects</h2>
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="project-card p-6 rounded-xl shadow-sm">
+                <div class="project-card p-6 rounded-xl">
                     <h3 class="text-xl font-bold mb-2 text-indigo-600 dark:text-indigo-400">
-                        <a href="https://kaushal-15.github.io/reader/" target="_blank" class="hover:underline">ReadMind</a>
+                        <a href="https://kaushal-15.github.io/reader/" target="_blank" class="hover:underline flex items-center">
+                            ReadMind <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                        </a>
                     </h3>
                     <p class="text-slate-600 dark:text-slate-300 mb-4">An AI-powered online book reader with summarization, word explanations, MCQs, and flashcards.</p>
                     <div class="flex flex-wrap gap-2">
@@ -154,13 +274,25 @@
                         <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-3 py-1 rounded-full">Education</span>
                     </div>
                 </div>
-                
+                <div class="project-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-2 text-indigo-600 dark:text-indigo-400">
+                        <a href="https://github.com/Kaushal-15/careBridge" target="_blank" class="hover:underline flex items-center">
+                            CareBridge <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                        </a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">An AI-powered healthcare app to overcome the Language and Appointments Barrier!</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-3 py-1 rounded-full">AI</span>
+                        <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-3 py-1 rounded-full">Healthcare</span>
+                        <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-3 py-1 rounded-full">Web</span>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="education" class="mb-20">
-            <h2 class="text-3xl font-bold mb-6 gradient-text">Education</h2>
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
+            <h2 class="text-3xl font-bold mb-6 gradient-text inline-block">Education</h2>
+            <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-sm border border-[var(--border-color)]">
                 <div class="flex items-start">
                     <div class="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-full mr-4">
                         <i class="fas fa-graduation-cap text-indigo-600 dark:text-indigo-400"></i>
@@ -175,9 +307,9 @@
         </section>
 
         <section id="contact" class="mb-20">
-            <h2 class="text-3xl font-bold mb-8 gradient-text">Get In Touch</h2>
+            <h2 class="text-3xl font-bold mb-8 gradient-text inline-block">Get In Touch</h2>
             <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm">
+                <div class="bg-[var(--card-bg)] p-8 rounded-xl shadow-sm border border-[var(--border-color)]">
                     <h3 class="text-xl font-bold mb-4 dark:text-white">Contact Information</h3>
                     <div class="space-y-4">
                         <div class="flex items-center">
@@ -186,85 +318,53 @@
                         </div>
                         <div class="flex items-center">
                             <i class="fab fa-github text-indigo-500 mr-4"></i>
-                            <a href="https://github.com/Kaushal-15" class="hover:underline dark:text-slate-300">Kaushal-15</a>
+                            <a href="https://github.com/Kaushal-15" target="_blank" class="hover:underline dark:text-slate-300">Kaushal-15</a>
                         </div>
                         <div class="flex items-center">
                             <i class="fab fa-linkedin text-indigo-500 mr-4"></i>
-                            <a href="https://www.linkedin.com/in/s-kaushal-a8033a2a5" class="hover:underline dark:text-slate-300">linkedin</a>
+                            <a href="https://www.linkedin.com/in/s-kaushal-a8033a2a5" target="_blank" class="hover:underline dark:text-slate-300">linkedin</a>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm">
+                <div class="bg-[var(--card-bg)] p-8 rounded-xl shadow-sm border border-[var(--border-color)]">
                     <h3 class="text-xl font-bold mb-4 dark:text-white">Send Me a Message</h3>
                     <form class="space-y-4">
                         <div>
                             <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Name</label>
-                            <input type="text" id="name" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white">
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white bg-transparent">
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
-                            <input type="email" id="email" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white">
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white bg-transparent">
                         </div>
                         <div>
                             <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Message</label>
-                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white"></textarea>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-700 dark:text-white bg-transparent"></textarea>
                         </div>
-                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">Send Message</button>
+                        <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg transition">Send Message</button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-white dark:bg-slate-800 py-6 border-t border-slate-200 dark:border-slate-700">
+    <footer class="bg-[var(--footer-bg)] py-6 border-t border-[var(--border-color)]">
         <div class="max-w-6xl mx-auto px-4 sm:px-10 text-center">
             <p class="text-slate-600 dark:text-slate-300">© 2025 Kaushal. Built with passion.</p>
             <div class="flex justify-center space-x-4 mt-4">
-                <a href="https://github.com/Kaushal-15" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                <a href="https://github.com/Kaushal-15" target="_blank" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                     <i class="fab fa-github text-xl"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/s-kaushal-a8033a2a5" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                <a href="https://www.linkedin.com/in/s-kaushal-a8033a2a5" target="_blank" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                     <i class="fab fa-linkedin text-xl"></i>
                 </a>
-                <a href="mailto:kaushalshanmugam15@gmail.com" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                <a href="mailto:kaushalshanmugam15@gmail.com" class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                     <i class="fas fa-envelope text-xl"></i>
                 </a>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Dark mode toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const html = document.documentElement;
-
-        // Check for saved theme preference or use system preference
-        const savedTheme = localStorage.getItem('theme') || 
-                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        if (savedTheme === 'dark') {
-            html.classList.add('dark');
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            
-            if (html.classList.contains('dark')) {
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Mobile menu toggle (placeholder for future implementation)
-        const mobileMenuButton = document.querySelector('.md\\:hidden');
-        mobileMenuButton.addEventListener('click', () => {
-            alert('Mobile menu would open here in a full implementation');
-        });
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
