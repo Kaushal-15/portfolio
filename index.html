@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="S. Kaushal Shanmugam - Full-Stack Developer & AI Enthusiast. Crafting innovative digital solutions with modern technologies.">
+    <meta name="keywords" content="Full-Stack Developer, AI, Machine Learning, Web Development, React, Node.js, Portfolio">
+    <meta name="author" content="S. Kaushal Shanmugam">
+    <title>S. Kaushal Shanmugam | Full-Stack Developer & AI Enthusiast</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for Advanced Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --bg-color: #fafbfc;
+            --text-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --footer-bg: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(226, 232, 240, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-light: rgba(99, 102, 241, 0.1);
+            --shadow-medium: rgba(99, 102, 241, 0.2);
+        }
+
+        .dark {
+            --primary: #818cf8;
+            --secondary: #a78bfa;
+            --accent: #22d3ee;
+            --bg-color: #0a0e1a;
+            --text-color: #f1f5f9;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --nav-bg: rgba(15, 23, 42, 0.95);
+            --footer-bg: rgba(15, 23, 42, 0.9);
+            --border-color: rgba(51, 65, 85, 0.8);
+            --glass-bg: rgba(30, 41, 59, 0.1);
+            --glass-border: rgba(148, 163, 184, 0.1);
+            --shadow-light: rgba(129, 140, 248, 0.1);
+            --shadow-medium: rgba(129, 140, 248, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(2) {
+            animation-delay: -2s;
+        }
+
+        .floating-element:nth-child(3) {
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+
+            66% {
+                transform: translateY(-10px) rotate(-5deg);
+            }
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--shadow-light);
+            }
+
+            50% {
+                box-shadow: 0 0 40px var(--shadow-medium);
+            }
+        }
+
+        .skill-badge {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .skill-badge:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px var(--shadow-medium);
+            border-color: var(--primary);
+        }
+
+        .skill-badge:hover::before {
+            left: 100%;
+        }
+
+        .project-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px) rotateX(5deg);
+            box-shadow: 0 25px 50px var(--shadow-medium);
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 8px 25px var(--shadow-light);
+        }
+
+        .profile-container {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: inherit;
+            z-index: -1;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        #profile-img {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .profile-container:hover {
+            transform: scale(1.05) rotateY(10deg);
+        }
+
+        .gsoc-badge {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            opacity: 1;
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+
+        .mobile-menu.open {
+            max-height: 400px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px var(--shadow-medium);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid var(--primary);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px var(--shadow-light);
+            color: white;
+        }
+
+        .btn-outline:hover::before {
+            opacity: 1;
+        }
+
+        .btn-outline span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            top: 60%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: var(--secondary);
+            transform: rotate(45deg);
+            animation: float 6s ease-in-out infinite reverse;
+        }
+
+        .shape-3 {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: float 10s ease-in-out infinite;
+        }
+        /* Minimal inline styles - main styles in styles.css */
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-logo">KS</div>
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+    <!-- Floating Shapes Background -->
+    <div class="floating-shapes">
+        <div class="shape shape-1 floating-element"></div>
+        <div class="shape shape-2 floating-element"></div>
+        <div class="shape shape-3 floating-element"></div>
+    </div>
+
+    <header class="py-6 px-4 sm:px-10 glass-card sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold gradient-text">S. Kaushal Shanmugam</h1>
+            <nav class="hidden md:flex space-x-2">
+                <a href="#about"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+                <a href="#skills"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Skills</a>
+                <a href="#experience"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Experience</a>
+                <a href="#projects"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
+                <a href="#contact"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="w-10 h-10 rounded-full theme-toggle flex items-center justify-center">
+                    <i class="fas fa-moon text-indigo-600 dark:text-yellow-300" id="theme-icon"></i>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden text-slate-600 dark:text-slate-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <div class="flex flex-col space-y-2 p-4">
+                <a href="#about"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+                <a href="#skills"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Skills</a>
+                <a href="#experience"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Experience</a>
+                <a href="#projects"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
+                <a href="#contact"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-10 py-12">
+        <!-- Hero Section -->
+        <section class="flex flex-col lg:flex-row items-center justify-between gap-12 mb-32 min-h-[80vh]">
+            <div class="lg:w-1/2 order-2 lg:order-1 animate__animated animate__fadeInLeft">
+                <div class="gsoc-badge inline-block mb-6">
+                    <i class="fas fa-rocket mr-2"></i>
+                    GSoC 2026 Aspirant
+                </div>
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                    <span class="block text-slate-900 dark:text-white">S. Kaushal</span>
+                    <span class="block text-slate-900 dark:text-white">Shanmugam</span>
+                </h1>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 gradient-text">
+                    Full-Stack Developer & AI Enthusiast
+                </h2>
+                <p class="text-xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed max-w-lg">
+                    Crafting innovative digital solutions with modern technologies.
+                    Aspiring to secure a ₹1 crore+ package through exceptional development skills and AI expertise.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contact" class="btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg">
+                        Let's Connect
+                    </a>
+                    <a href="S.Kaushal-Resume.pdf" download
+                        class="btn-outline text-indigo-600 dark:text-indigo-400 px-8 py-4 rounded-xl font-semibold text-lg">
+                        <span>Download Resume</span>
+                    </a>
+                </div>
+            </div>
+            <div
+                class="lg:w-1/2 flex justify-center order-1 lg:order-2 mb-8 lg:mb-0 animate__animated animate__fadeInRight">
+                <div
+                    class="profile-container w-80 h-80 rounded-full flex items-center justify-center overflow-hidden shadow-2xl relative">
+                    <img id="profile-img" src="profile.jpeg" alt="S. Kaushal Shanmugam"
+                        class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">About Me</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Passionate developer on a mission to create impactful solutions
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">My Journey</h3>
+                    <p class="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+                        Currently pursuing a Diploma in Computer Technology at Kongu Polytechnic College,
+                        I'm a dedicated full-stack developer with a passion for AI integration and modern web
+                        technologies.
+                    </p>
+                    <p class="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+                        My goal is to secure a prestigious position of Software Development Engineer(SDE) with
+                        cutting-edge technologies and contributing to innovative projects that make a real difference.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-4 py-2 rounded-full text-sm font-medium">
+                            Problem Solver
+                        </span>
+                        <span
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-4 py-2 rounded-full text-sm font-medium">
+                            AI Enthusiast
+                        </span>
+                        <span
+                            class="bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200 px-4 py-2 rounded-full text-sm font-medium">
+                            Full-Stack Developer
+                        </span>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">What Drives Me</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-lg">
+                                <i class="fas fa-rocket text-indigo-600 dark:text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white mb-2">Innovation</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Building solutions that push boundaries
+                                    and solve real-world problems</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+                                <i class="fas fa-brain text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white mb-2">Continuous Learning</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Staying ahead with the latest technologies
+                                    and best practices</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-cyan-100 dark:bg-cyan-900 p-3 rounded-lg">
+                                <i class="fas fa-users text-cyan-600 dark:text-cyan-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white mb-2">Impact</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Creating technology that makes a
+                                    meaningful difference in people's lives</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Technical Skills</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Mastering modern technologies to build exceptional digital experiences
+                </p>
+            </div>
+
+            <div class="grid gap-8">
+                <!-- Frontend Technologies -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center">
+                        <i class="fas fa-palette text-indigo-500 mr-3"></i>
+                        Frontend Development
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-html5 text-4xl text-orange-500 mb-3"></i>
+                            <span class="font-semibold">HTML5</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-css3-alt text-4xl text-blue-500 mb-3"></i>
+                            <span class="font-semibold">CSS3</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-js-square text-4xl text-yellow-400 mb-3"></i>
+                            <span class="font-semibold">JavaScript</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-react text-4xl text-blue-400 mb-3"></i>
+                            <span class="font-semibold">React.js</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-wind text-4xl text-teal-400 mb-3"></i>
+                            <span class="font-semibold">Tailwind</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-flutter text-4xl text-blue-400 mb-3"></i>
+                            <span class="font-semibold">Flutter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Technologies -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center">
+                        <i class="fas fa-server text-green-500 mr-3"></i>
+                        Backend Development
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-node-js text-4xl text-green-500 mb-3"></i>
+                            <span class="font-semibold">Node.js</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-server text-4xl text-green-600 mb-3"></i>
+                            <span class="font-semibold">Express.js</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-database text-4xl text-green-700 mb-3"></i>
+                            <span class="font-semibold">MongoDB</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-database text-4xl text-blue-600 mb-3"></i>
+                            <span class="font-semibold">PostgreSQL</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-database text-4xl text-orange-600 mb-3"></i>
+                            <span class="font-semibold">MySQL</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-java text-4xl text-red-600 mb-3"></i>
+                            <span class="font-semibold">Java</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-python text-4xl text-yellow-500 mb-3"></i>
+                            <span class="font-semibold">Python</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-cogs text-4xl text-purple-600 mb-3"></i>
+                            <span class="font-semibold">n8n</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-shield-alt text-4xl text-purple-500 mb-3"></i>
+                            <span class="font-semibold">SHA-256</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-key text-4xl text-red-500 mb-3"></i>
+                            <span class="font-semibold">JWT Auth</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tools & Technologies -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center">
+                        <i class="fas fa-tools text-purple-500 mr-3"></i>
+                        Tools & Technologies
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-git-alt text-4xl text-red-500 mb-3"></i>
+                            <span class="font-semibold">Git</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-github text-4xl text-gray-700 dark:text-gray-300 mb-3"></i>
+                            <span class="font-semibold">GitHub</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-docker text-4xl text-blue-600 mb-3"></i>
+                            <span class="font-semibold">Docker</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-aws text-4xl text-orange-500 mb-3"></i>
+                            <span class="font-semibold">AWS</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-brain text-4xl text-pink-500 mb-3"></i>
+                            <span class="font-semibold">AI/ML</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-microchip text-4xl text-orange-500 mb-3"></i>
+                            <span class="font-semibold">IoT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- System Design & DSA -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center">
+                        <i class="fas fa-sitemap text-orange-500 mr-3"></i>
+                        System Design & DSA(Currently Learning)
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fab fa-cuttlefish text-4xl text-blue-600 mb-3"></i>
+                            <span class="font-semibold">C++ DSA</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-project-diagram text-4xl text-purple-600 mb-3"></i>
+                            <span class="font-semibold">LLD</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-network-wired text-4xl text-indigo-600 mb-3"></i>
+                            <span class="font-semibold">HLD</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-code-branch text-4xl text-green-600 mb-3"></i>
+                            <span class="font-semibold">Algorithms</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-layer-group text-4xl text-red-600 mb-3"></i>
+                            <span class="font-semibold">Data Structures</span>
+                        </div>
+                        <div class="skill-badge p-6 rounded-xl flex flex-col items-center">
+                            <i class="fas fa-cubes text-4xl text-cyan-600 mb-3"></i>
+                            <span class="font-semibold">System Architecture</span>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Experience</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Building real-world solutions and gaining valuable industry experience
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+                    <div class="lg:w-1/4">
+                        <div
+                            class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl text-white text-center">
+                            <i class="fas fa-home text-3xl mb-2"></i>
+                            <h4 class="font-bold">Smart Home Tech</h4>
+                        </div>
+                    </div>
+                    <div class="lg:w-3/4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Full Stack Developer</h3>
+                            <span class="text-indigo-600 dark:text-indigo-400 font-semibold">May 2025 - Jul 2025</span>
+                        </div>
+                        <p class="text-lg text-slate-600 dark:text-slate-300 mb-4">
+                            Smart Home Healthcare Solutions • Internship (3 Months) • Chennai, Tamil Nadu, India •
+                            Remote
+                        </p>
+                        <div class="mb-6">
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-3">Key Achievements:</h4>
+                            <ul class="space-y-2 text-slate-600 dark:text-slate-300 mb-4">
+                                <li class="flex items-start"><i class="fas fa-star text-yellow-500 mr-2 mt-1"></i> Built
+                                    an intelligent healthcare monitoring system AI for real-time patient data tracking
+                                </li>
+                                <li class="flex items-start"><i class="fas fa-star text-yellow-500 mr-2 mt-1"></i>
+                                    Designed and deployed a secure full-stack web platform for healthcare professionals
+                                    and patients to monitor vitals remotely</li>
+                                <li class="flex items-start"><i class="fas fa-star text-yellow-500 mr-2 mt-1"></i>
+                                    Achieved seamless device-to-cloud connectivity using RESTful APIs</li>
+                            </ul>
+                        </div>
+                        <div class="mb-6">
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-3">Website Design & Project
+                                Management:</h4>
+                            <ul class="space-y-2 text-slate-600 dark:text-slate-300 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    Developed a responsive React.js + Tailwind CSS frontend for patient dashboards and
+                                    medical reports</li>
+                                <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    Integrated backend using Node.js, Express.js, and MongoDB for efficient data storage
+                                    and retrieval</li>
+                                <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    Implemented JWT-based authentication and role-based access control for doctors and
+                                    patients</li>
+                                <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    Deployed the system using Docker containers and managed cloud hosting through AWS
+                                    EC2</li>
+                                <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    Streamlined continuous deployment with CI/CD pipelines and version control via Git &
+                                    GitHub</li>
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-3">Areas of Expertise:</h4>
+                            <ul class="space-y-1 text-slate-600 dark:text-slate-300 mb-4">
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Full
+                                    Stack Web Development (MERN)</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Cloud &
+                                    Containerization (AWS, Docker)</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> CI/CD
+                                    Automation & Deployment</li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">React.js</span>
+                            <span
+                                class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Node.js</span>
+                            <span
+                                class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">MongoDB</span>
+                            <span
+                                class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">AWS</span>
+                            <span
+                                class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm">Docker</span>
+                            <span
+                                class="bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200 px-3 py-1 rounded-full text-sm">Healthcare</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Projects Section -->
+        <section id="projects" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Featured Projects</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Innovative solutions showcasing modern development practices and AI integration
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- LegitMind Project -->
+                <div class="project-card p-8 rounded-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">LegitMind</h3>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fas fa-external-link-alt text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
+                        AI-powered platform for authentication, task automation, and smart workflows.
+                        Built with modern stack including React, Node.js, and advanced AI integration for seamless user
+                        experience.
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI-powered
+                                authentication</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Smart
+                                workflow automation</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Real-time
+                                task management</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">React</span>
+                        <span
+                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Node.js</span>
+                        <span
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">AI/ML</span>
+                        <span
+                            class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Authentication</span>
+                    </div>
+                </div>
+
+                <!-- Learning.AI Project -->
+                <div class="project-card p-8 rounded-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Learning.AI</h3>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fas fa-external-link-alt text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
+                        MERN-based learning platform with SHA-256 encryption, secured sessions, dynamic MCQs,
+                        AI-driven explanations, and comprehensive user dashboard for enhanced learning experience.
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> SHA-256
+                                encryption</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI-driven
+                                explanations</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Dynamic MCQ
+                                system</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">MERN</span>
+                        <span
+                            class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm">Security</span>
+                        <span
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">AI</span>
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">Education</span>
+                    </div>
+                </div>
+
+                <!-- ReadMind Project -->
+                <div class="project-card p-8 rounded-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">ReadMind</h3>
+                        <div class="flex space-x-3">
+                            <a href="https://github.com/Kaushal-15/reader" target="_blank"
+                                class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="https://kaushal-15.github.io/reader/" target="_blank"
+                                class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fas fa-external-link-alt text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
+                        Online book reader with AI summarization, intelligent word explanations, interactive notes,
+                        flashcards, and MCQs for enhanced reading comprehension and learning.
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI
+                                summarization</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Smart word
+                                explanations</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Interactive
+                                flashcards</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">AI</span>
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">Web</span>
+                        <span
+                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Education</span>
+                        <span
+                            class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Reading</span>
+                    </div>
+                </div>
+
+                <!-- Smart Home Technologies Project -->
+                <div class="project-card p-8 rounded-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Smart Home Technologies</h3>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
+                        Digital Solutions for the patients using physiotheraphy via the help of the Technology and Tools..
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Smart
+                                automation</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Real-time
+                                monitoring</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Security
+                                integration</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">React.js</span>
+                        <span
+                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Attractive dashboards</span>
+                        <span
+                            class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm">Security</span>
+                        <span
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">Automation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Education</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Building a strong foundation in computer technology and software development
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+                    <div class="lg:w-1/4">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-6 rounded-xl text-white text-center">
+                            <i class="fas fa-graduation-cap text-4xl mb-3"></i>
+                            <h4 class="font-bold text-lg">Kongu Polytechnic</h4>
+                        </div>
+                    </div>
+                    <div class="lg:w-3/4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Diploma in Computer Technology
+                            </h3>
+                            <span class="text-purple-600 dark:text-purple-400 font-semibold">2023 - 2026</span>
+                        </div>
+                        <p class="text-lg text-slate-600 dark:text-slate-300 mb-4">
+                            Kongu Polytechnic College, Erode, Tamil Nadu
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300 mb-6">
+                            Comprehensive curriculum covering software development, data structures, algorithms,
+                            web technologies, and modern programming practices. Active participation in coding
+                            competitions and technical events.
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span class="text-slate-700 dark:text-slate-300">Data Structures & Algorithms</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span class="text-slate-700 dark:text-slate-300">Web Development</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span class="text-slate-700 dark:text-slate-300">Database Management</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                <span class="text-slate-700 dark:text-slate-300">Software Engineering</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Let's Connect</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Ready to collaborate on exciting projects or discuss opportunities
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Contact Information -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-8 text-slate-900 dark:text-white">Get In Touch</h3>
+                    <div class="space-y-6">
+                        <div
+                            class="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20">
+                            <div class="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-lg">
+                                <i class="fas fa-envelope text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white">Email</h4>
+                                <a href="mailto:kaushalshanmugam15@gmail.com"
+                                    class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                    kaushalshanmugam15@gmail.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+                                <i class="fab fa-github text-purple-600 dark:text-purple-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white">GitHub</h4>
+                                <a href="https://github.com/Kaushal-15" target="_blank"
+                                    class="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                                    github.com/Kaushal-15
+                                </a>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                                <i class="fab fa-linkedin text-blue-600 dark:text-blue-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 dark:text-white">LinkedIn</h4>
+                                <a href="https://www.linkedin.com/in/kaushalshanmugam/" target="_blank"
+                                    class="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Connect with me
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Contact Form -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-8 text-slate-900 dark:text-white">Send a Message</h3>
+                    <form class="space-y-6" id="contact-form">
+                        <div>
+                            <label for="name"
+                                class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full
+                                Name</label>
+                            <input type="text" id="name" name="name" required
+                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                        </div>
+                        <div>
+                            <label for="email"
+                                class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email
+                                Address</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                        </div>
+                        <div>
+                            <label for="subject"
+                                class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" required
+                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                        </div>
+                        <div>
+                            <label for="message"
+                                class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" required
+                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all resize-none"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg">
+                            Send Message
+                            <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card py-12 border-t border-[var(--border-color)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-10">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">S. Kaushal Shanmugam</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">
+                        Full-Stack Developer & AI Enthusiast passionate about creating innovative digital solutions.
+                    </p>
+                    <div class="gsoc-badge inline-block">
+                        <i class="fas fa-rocket mr-2"></i>
+                        GSoC 2026 Aspirant
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Quick Links</h4>
+                    <div class="space-y-2">
+                        <a href="#about"
+                            class="block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
+                        <a href="#skills"
+                            class="block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Skills</a>
+                        <a href="#projects"
+                            class="block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Projects</a>
+                        <a href="#contact"
+                            class="block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/Kaushal-15" target="_blank"
+                            class="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kaushalshanmugam/" target="_blank"
+                            class="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="mailto:kaushalshanmugam15@gmail.com"
+                            class="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg text-slate-600 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-8 text-center">
+                <p class="text-slate-600 dark:text-slate-300">
+                    © 2025 S. Kaushal Shanmugam. Crafted with
+                    <i class="fas fa-heart text-red-500 mx-1"></i>
+                    and cutting-edge technology.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="three-scene.js"></script>
+    <script src="animations.js"></script>
+    <script src="index.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NF3S1S18PX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NF3S1S18PX');
+    </script>
+
+</body>
+
+</html>
