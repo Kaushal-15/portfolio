@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Certificates - S. Kaushal Shanmugam">
+    <title>Certificates | S. Kaushal Shanmugam</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        /* Certificate specific styles */
+        .cert-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            aspect-ratio: 4/3;
+            cursor: pointer;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px var(--shadow-medium);
+            border-color: var(--primary);
+        }
+
+        .cert-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            opacity: 0.8;
+        }
+
+        .cert-card:hover .cert-content {
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+        }
+
+        .cert-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            transition: all 0.4s ease;
+        }
+
+        .cert-card:hover .cert-icon {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .cert-title {
+            font-weight: 600;
+            color: white;
+            font-size: 1.1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            background: var(--bg-color);
+            border-radius: 1rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: auto;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        .cert-preview {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        iframe.cert-preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+    
+    <header class="py-6 px-4 sm:px-10 glass-card sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold gradient-text">S. Kaushal Shanmugam</a>
+            <nav class="hidden md:flex space-x-2">
+                <a href="index.html#about" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+                <a href="index.html#skills" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Skills</a>
+                <a href="index.html#experience" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Experience</a>
+                <a href="index.html#projects" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
+                <a href="#" class="nav-link text-indigo-600 dark:text-indigo-400 font-semibold">Certificates</a>
+                <a href="index.html#contact" class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="w-10 h-10 rounded-full theme-toggle flex items-center justify-center">
+                    <i class="fas fa-moon text-indigo-600 dark:text-yellow-300" id="theme-icon"></i>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden text-slate-600 dark:text-slate-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <div class="flex flex-col space-y-2 p-4">
+                <a href="index.html#about" class="nav-link text-slate-600 dark:text-slate-300">About</a>
+                <a href="index.html#skills" class="nav-link text-slate-600 dark:text-slate-300">Skills</a>
+                <a href="index.html#experience" class="nav-link text-slate-600 dark:text-slate-300">Experience</a>
+                <a href="index.html#projects" class="nav-link text-slate-600 dark:text-slate-300">Projects</a>
+                <a href="#" class="nav-link text-indigo-600 dark:text-indigo-400">Certificates</a>
+                <a href="index.html#contact" class="nav-link text-slate-600 dark:text-slate-300">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-10 py-12">
+        <section class="mb-16">
+            <div class="text-center mb-16 animate__animated animate__fadeInDown">
+                <h1 class="text-4xl sm:text-5xl font-bold mb-4 gradient-text">Certificates & Achievements</h1>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    A collection of my professional certifications and badges
+                </p>
+            </div>
+
+            <div id="certificates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Certificates will be populated here by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="cert-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-900 dark:text-white">Certificate Title</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="three-scene.js"></script>
+    <script src="certificates.js"></script>
+    <script>
+        // Theme Toggle Logic (Copied from index.js for consistency)
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+        const body = document.body;
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            body.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            body.classList.toggle('dark');
+            
+            if (html.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+        const follower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            follower.style.left = e.clientX + 'px';
+            follower.style.top = e.clientY + 'px';
+            
+            cursor.classList.add('active');
+            follower.classList.add('active');
+        });
+
+        // Add hover effect to interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .cert-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+    </script>
+</body>
+</html>
