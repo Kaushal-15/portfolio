@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Lab | Kaushal Shanmugam</title>
+    <meta name="description" content="Engineering doc — Kaushal Shanmugam">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Mermaid.js for architecture diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --bg-color: #fafbfc;
+            --text-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(226, 232, 240, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-light: rgba(99, 102, 241, 0.1);
+            --shadow-medium: rgba(99, 102, 241, 0.2);
+            --muted: #64748b;
+            --card-border: rgba(226, 232, 240, 0.6);
+            --code-bg: #f1f5f9;
+            --sidebar-bg: #ffffff;
+            --toc-active: var(--primary);
+        }
+
+        .dark {
+            --primary: #818cf8;
+            --secondary: #a78bfa;
+            --accent: #22d3ee;
+            --bg-color: #0a0e1a;
+            --text-color: #f1f5f9;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --nav-bg: rgba(15, 23, 42, 0.95);
+            --border-color: rgba(51, 65, 85, 0.8);
+            --glass-bg: rgba(30, 41, 59, 0.3);
+            --glass-border: rgba(148, 163, 184, 0.1);
+            --shadow-light: rgba(129, 140, 248, 0.1);
+            --shadow-medium: rgba(129, 140, 248, 0.2);
+            --muted: #94a3b8;
+            --card-border: rgba(51, 65, 85, 0.5);
+            --code-bg: rgba(15, 23, 42, 0.8);
+            --sidebar-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 85%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ── NAV ── */
+        .lab-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.9rem 2rem;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .nav-breadcrumb a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .nav-breadcrumb .sep {
+            color: var(--muted);
+            opacity: 0.5;
+        }
+
+        .nav-breadcrumb .current {
+            color: var(--text-color);
+            font-weight: 600;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .theme-btn {
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.25s;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--primary);
+            transform: rotate(180deg);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ── PAGE LAYOUT ── */
+        .doc-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 240px 1fr 220px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1200px) {
+            .doc-layout {
+                grid-template-columns: 200px 1fr;
+            }
+
+            .meta-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .doc-layout {
+                grid-template-columns: 1fr;
+                padding: 1.25rem;
+                gap: 1.5rem;
+            }
+
+            .toc-sidebar {
+                display: none;
+            }
+        }
+
+        /* ── SIDEBAR TOC ── */
+        .toc-sidebar {
+            position: sticky;
+            top: 80px;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 2px;
+        }
+
+        .toc-heading {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.875rem;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .toc-item a {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.35rem 0.6rem;
+            border-left: 2px solid transparent;
+            border-radius: 0 6px 6px 0;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-item a:hover {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .toc-item.active a {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(99, 102, 241, 0.07);
+            font-weight: 600;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .doc-main {
+            min-width: 0;
+        }
+
+        /* ── DOC HEADER ── */
+        .doc-header {
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .category-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+        }
+
+        .badge-indigo {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .badge-pink {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .badge-emerald {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .dark .badge-indigo {
+            background: rgba(129, 140, 248, 0.15);
+            color: #818cf8;
+        }
+
+        .dark .badge-pink {
+            background: rgba(244, 114, 182, 0.15);
+            color: #f472b6;
+        }
+
+        .dark .badge-red {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+        }
+
+        .dark .badge-emerald {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+        }
+
+        .dark .badge-amber {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .doc-title {
+            font-size: clamp(1.6rem, 4vw, 2.25rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--text-color);
+            margin-bottom: 0.875rem;
+        }
+
+        .doc-summary {
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 1.25rem;
+            max-width: 680px;
+        }
+
+        .header-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 5px;
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--muted);
+            border: 1px solid var(--card-border);
+            font-weight: 500;
+        }
+
+        .dark .tag {
+            background: rgba(129, 140, 248, 0.08);
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--muted);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.06);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-medium);
+        }
+
+        /* ── CONTENT SECTIONS ── */
+        .doc-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            scroll-margin-top: 90px;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .section-title-bar {
+            width: 3px;
+            height: 1.1rem;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ── PROSE ── */
+        .prose {
+            font-size: 0.925rem;
+            line-height: 1.75;
+            color: var(--text-color);
+        }
+
+        .prose p {
+            margin-bottom: 1rem;
+        }
+
+        .prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        .prose strong {
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .prose code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82em;
+            background: var(--code-bg);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            border: 1px solid var(--card-border);
+        }
+
+        .prose pre {
+            background: var(--code-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.65;
+        }
+
+        .dark .prose pre {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .prose ol {
+            list-style: decimal;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prose ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prose li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* ── TECH STACK TABLE ── */
+        .stack-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .stack-table tr {
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .stack-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .stack-table td {
+            padding: 0.7rem 0.5rem;
+            vertical-align: top;
+        }
+
+        .stack-label {
+            font-weight: 600;
+            color: var(--text-color);
+            width: 140px;
+            white-space: nowrap;
+        }
+
+        .stack-value {
+            color: var(--muted);
+        }
+
+        /* ── HIGHLIGHT BOX ── */
+        .highlight-box {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-top: 1.25rem;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .highlight-box.warning {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            color: #92400e;
+        }
+
+        .dark .highlight-box.warning {
+            background: rgba(251, 191, 36, 0.08);
+            border-color: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .highlight-box.info {
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+        }
+
+        .highlight-box i {
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        /* ── DIAGRAM ── */
+        .diagram-wrap {
+            margin-top: 1.25rem;
+            background: var(--code-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .dark .diagram-wrap {
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        /* ── META PANEL (right) ── */
+        .meta-panel {
+            position: sticky;
+            top: 80px;
+        }
+
+        .meta-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .meta-section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.875rem;
+        }
+
+        .meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .meta-key {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+        }
+
+        .meta-val {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .meta-divider {
+            height: 1px;
+            background: var(--card-border);
+            margin: 0.875rem 0;
+        }
+
+        /* ── MOBILE TOC: collapsible ── */
+        .mobile-toc {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toc {
+                display: block;
+            }
+
+            .doc-layout {
+                padding: 1rem;
+            }
+        }
+
+        .mobile-toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .mobile-toc-list {
+            margin-top: 0.75rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .mobile-toc-list.open {
+            display: flex;
+        }
+
+        .mobile-toc-list a {
+            font-size: 0.82rem;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .mobile-toc-list a:last-child {
+            border-bottom: none;
+        }
+
+        /* ── NOT FOUND ── */
+        .not-found {
+            max-width: 480px;
+            margin: 6rem auto;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .not-found i {
+            font-size: 3rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .not-found h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .not-found p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── LOADING ── */
+        .doc-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            gap: 0.75rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAV -->
+    <nav class="lab-nav">
+        <div class="nav-inner">
+            <div class="nav-breadcrumb">
+                <a href="index.html">Kaushal</a>
+                <span class="sep">/</span>
+                <a href="lab.html">Lab</a>
+                <span class="sep">/</span>
+                <span class="current" id="nav-doc-title">Loading...</span>
+            </div>
+            <div class="nav-right">
+                <a href="lab.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Lab
+                </a>
+                <button class="theme-btn" id="theme-toggle" title="Toggle theme">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <div id="page-root">
+        <div class="doc-loading">
+            <i class="fas fa-circle-notch spin"></i>
+            Loading...
+        </div>
+    </div>
+
+    <!-- DATA -->
+    <script src="lab-data.js"></script>
+
+    <script>
+        // ── THEME ──
+        const THEME_KEY = 'portfolio-theme';
+        const root = document.documentElement;
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                root.classList.add('dark');
+                document.body.classList.add('dark');
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                root.classList.remove('dark');
+                document.body.classList.remove('dark');
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        applyTheme(isDark);
+
+        themeBtn.addEventListener('click', () => {
+            isDark = !isDark;
+            localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+            applyTheme(isDark);
+            // re-render mermaid if needed
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({ startOnLoad: true, theme: isDark ? 'dark' : 'default' });
+            }
+        });
+
+        // ── SLUG FROM URL ──
+        function getSlug() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('doc');
+        }
+
+        // ── MARKDOWN-LITE PARSER ──
+        // Handles: **bold**, `inline code`, code blocks (```...```), numbered lists
+        function mdToHtml(text) {
+            if (!text) return '';
+
+            let html = '';
+            const lines = text.split('\n');
+            let inCodeBlock = false;
+            let codeLang = '';
+            let codeLines = [];
+            let inList = false;
+            let listItems = [];
+
+            function flushList() {
+                if (!inList) return '';
+                inList = false;
+                const items = listItems.map(li => `<li>${inlineFormat(li)}</li>`).join('');
+                listItems = [];
+                return `<ul class="prose-ul">${items}</ul>`;
+            }
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+
+                // Code block
+                if (line.startsWith('```')) {
+                    if (!inCodeBlock) {
+                        html += flushList();
+                        inCodeBlock = true;
+                        codeLang = line.slice(3).trim();
+                        codeLines = [];
+                    } else {
+                        inCodeBlock = false;
+                        const escaped = codeLines.join('\n').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        html += `<pre><code>${escaped}</code></pre>`;
+                        codeLines = [];
+                    }
+                    continue;
+                }
+
+                if (inCodeBlock) {
+                    codeLines.push(line);
+                    continue;
+                }
+
+                // Numbered list line
+                if (/^\d+\.\s/.test(line)) {
+                    if (inList) { listItems.push(line.replace(/^\d+\.\s/, '')); continue; }
+                    html += flushList();
+                    inList = true;
+                    listItems.push(line.replace(/^\d+\.\s/, ''));
+                    continue;
+                }
+
+                // Bullet list
+                if (/^[-*]\s/.test(line)) {
+                    if (!inList) {
+                        html += flushList();
+                        inList = true;
+                    }
+                    listItems.push(line.replace(/^[-*]\s/, ''));
+                    continue;
+                }
+
+                // Regular paragraph
+                html += flushList();
+
+                if (line.trim() === '') {
+                    html += '';
+                    continue;
+                }
+
+                html += `<p>${inlineFormat(line)}</p>`;
+            }
+
+            html += flushList();
+            return html;
+        }
+
+        function inlineFormat(text) {
+            // **bold**
+            text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            // `code`
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            return text;
+        }
+
+        // ── SECTION ICONS ──
+        const SECTION_ICONS = {
+            'overview': 'fas fa-eye',
+            'problem': 'fas fa-crosshairs',
+            'goal': 'fas fa-bullseye',
+            'architecture': 'fas fa-layer-group',
+            'tech-stack': 'fas fa-microchip',
+            'core-workflow': 'fas fa-project-diagram',
+            'api-flow': 'fas fa-route',
+            'api-structure': 'fas fa-route',
+            'data-flow': 'fas fa-exchange-alt',
+            'ai-integration': 'fas fa-brain',
+            'database': 'fas fa-database',
+            'bottlenecks': 'fas fa-exclamation-triangle',
+            'improvements': 'fas fa-arrow-up-right-dots',
+            'layout-breakdown': 'fas fa-table-columns',
+            'component-structure': 'fas fa-cubes',
+            'ui-decisions': 'fas fa-palette',
+            'responsiveness': 'fas fa-mobile-alt',
+            'what-was-tricky': 'fas fa-bug',
+            'what-feels-off': 'fas fa-triangle-exclamation',
+            'hero-layout': 'fas fa-image',
+            'row-scrolling': 'fas fa-scroll',
+            'hover-cards': 'fas fa-hand-pointer',
+            'nav-behavior': 'fas fa-bars',
+            'what-i-rebuilt': 'fas fa-hammer',
+        };
+
+        function sectionIcon(id) {
+            const key = Object.keys(SECTION_ICONS).find(k => id.includes(k));
+            return key ? SECTION_ICONS[key] : 'fas fa-file-lines';
+        }
+
+        // ── RENDER TECH STACK ──
+        function renderTechStack(items) {
+            return `
+        <table class="stack-table">
+          ${items.map(item => `
+            <tr>
+              <td class="stack-label">${item.label}</td>
+              <td class="stack-value">${item.value}</td>
+            </tr>
+          `).join('')}
+        </table>
+      `;
+        }
+
+        // ── RENDER SECTION ──
+        function renderSection(section) {
+            const icon = sectionIcon(section.id);
+
+            let inner = '';
+
+            // Tech stack table
+            if (section.items && !section.content) {
+                inner = renderTechStack(section.items);
+            } else if (section.content) {
+                inner = `<div class="prose">${mdToHtml(section.content)}</div>`;
+                if (section.items) {
+                    inner += renderTechStack(section.items);
+                }
+            }
+
+            // Highlight box (warning/info)
+            if (section.highlight) {
+                const icon2 = section.highlight.type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+                inner += `
+          <div class="highlight-box ${section.highlight.type}">
+            <i class="${icon2}"></i>
+            <span>${section.highlight.text}</span>
+          </div>
+        `;
+            }
+
+            // Mermaid diagram
+            if (section.diagram && section.diagram.type === 'mermaid') {
+                inner += `
+          <div class="diagram-wrap">
+            <pre class="mermaid">${section.diagram.code}</pre>
+          </div>
+        `;
+            }
+
+            return `
+        <section class="doc-section" id="section-${section.id}">
+          <div class="section-title">
+            <div class="section-title-bar"></div>
+            ${section.title}
+          </div>
+          ${inner}
+        </section>
+      `;
+        }
+
+        // ── RENDER HEADER ──
+        function renderHeader(doc) {
+            const color = CATEGORY_COLORS[doc.category] || 'indigo';
+            const tagsHtml = doc.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+            const actions = [];
+            if (doc.links?.demo) {
+                actions.push(`<a href="${doc.links.demo}" target="_blank" rel="noopener" class="action-btn primary"><i class="fas fa-external-link-alt"></i> Live Demo</a>`);
+            }
+            if (doc.links?.github) {
+                actions.push(`<a href="${doc.links.github}" target="_blank" rel="noopener" class="action-btn"><i class="fab fa-github"></i> GitHub</a>`);
+            }
+            actions.push(`<a href="lab.html" class="action-btn"><i class="fas fa-arrow-left"></i> Back to Lab</a>`);
+
+            return `
+        <div class="doc-header">
+          <div class="header-meta">
+            <span class="category-badge badge-${color}">${doc.category}</span>
+            <span class="meta-pill"><i class="fas fa-clock"></i> ${doc.readTime}</span>
+            <span class="meta-pill"><i class="fas fa-calendar-alt"></i> ${doc.lastUpdated}</span>
+          </div>
+          <h1 class="doc-title">${doc.title}</h1>
+          <p class="doc-summary">${doc.summary}</p>
+          <div class="header-tags">${tagsHtml}</div>
+          <div class="header-actions">${actions.join('')}</div>
+        </div>
+      `;
+        }
+
+        // ── RENDER TOC ──
+        function renderToc(sections) {
+            const items = sections.map(s => `
+        <li class="toc-item" id="toc-${s.id}">
+          <a href="#section-${s.id}">${s.title}</a>
+        </li>
+      `).join('');
+
+            return `
+        <nav class="toc-sidebar">
+          <div class="toc-heading">On this page</div>
+          <ul class="toc-list">${items}</ul>
+        </nav>
+      `;
+        }
+
+        // ── RENDER MOBILE TOC ──
+        function renderMobileToc(sections) {
+            const links = sections.map(s => `<a href="#section-${s.id}">${s.title}</a>`).join('');
+            return `
+        <div class="mobile-toc" id="mobile-toc">
+          <div class="mobile-toc-header" id="mobile-toc-toggle">
+            <span><i class="fas fa-list" style="margin-right:0.4rem"></i>Contents</span>
+            <i class="fas fa-chevron-down" id="mobile-toc-chevron"></i>
+          </div>
+          <div class="mobile-toc-list" id="mobile-toc-list">${links}</div>
+        </div>
+      `;
+        }
+
+        // ── RENDER META PANEL ──
+        function renderMetaPanel(doc) {
+            const color = CATEGORY_COLORS[doc.category] || 'indigo';
+            const allTags = doc.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+            return `
+        <aside class="meta-panel">
+          <div class="meta-card">
+            <div class="meta-section-title">Document Info</div>
+            <div class="meta-row">
+              <div class="meta-item">
+                <div class="meta-key">Category</div>
+                <div class="meta-val"><span class="category-badge badge-${color}">${doc.category}</span></div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-key">Read Time</div>
+                <div class="meta-val">${doc.readTime}</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-key">Last Updated</div>
+                <div class="meta-val">${doc.lastUpdated}</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-key">Sections</div>
+                <div class="meta-val">${doc.sections.length} sections</div>
+              </div>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-section-title">Tags</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.35rem;">${allTags}</div>
+            ${doc.links?.github ? `
+            <div class="meta-divider"></div>
+            <div class="meta-section-title">Links</div>
+            <a href="${doc.links.github}" target="_blank" rel="noopener" class="action-btn" style="width:100%;justify-content:center;margin-bottom:0.4rem;">
+              <i class="fab fa-github"></i> GitHub
+            </a>` : ''}
+            ${doc.links?.demo ? `
+            <a href="${doc.links.demo}" target="_blank" rel="noopener" class="action-btn primary" style="width:100%;justify-content:center;">
+              <i class="fas fa-external-link-alt"></i> Live Demo
+            </a>` : ''}
+          </div>
+        </aside>
+      `;
+        }
+
+        // ── RENDER NOT FOUND ──
+        function renderNotFound(slug) {
+            return `
+        <div class="not-found">
+          <i class="fas fa-file-circle-xmark"></i>
+          <h2>Doc not found</h2>
+          <p>No document exists for <code>${slug || 'this slug'}</code>.</p>
+          <a href="lab.html" class="action-btn primary">
+            <i class="fas fa-arrow-left"></i> Back to Lab
+          </a>
+        </div>
+      `;
+        }
+
+        // ── INIT SCROLL SPY ──
+        function initScrollSpy(sections) {
+            const targets = sections.map(s => ({
+                id: s.id,
+                el: document.getElementById(`section-${s.id}`)
+            })).filter(t => t.el);
+
+            const tocItems = {};
+            sections.forEach(s => {
+                const el = document.getElementById(`toc-${s.id}`);
+                if (el) tocItems[s.id] = el;
+            });
+
+            function onScroll() {
+                let current = targets[0]?.id;
+                for (const { id, el } of targets) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= 120) current = id;
+                }
+                Object.values(tocItems).forEach(el => el.classList.remove('active'));
+                if (current && tocItems[current]) tocItems[current].classList.add('active');
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        }
+
+        // ── MOBILE TOC TOGGLE ──
+        function initMobileToc() {
+            const toggle = document.getElementById('mobile-toc-toggle');
+            const list = document.getElementById('mobile-toc-list');
+            const chevron = document.getElementById('mobile-toc-chevron');
+            if (!toggle) return;
+            toggle.addEventListener('click', () => {
+                list.classList.toggle('open');
+                chevron.style.transform = list.classList.contains('open') ? 'rotate(180deg)' : '';
+            });
+            // Close on link click
+            list.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => list.classList.remove('open'));
+            });
+        }
+
+        // ── MAIN ──
+        function init() {
+            const slug = getSlug();
+            const pageRoot = document.getElementById('page-root');
+            const navTitle = document.getElementById('nav-doc-title');
+
+            if (!slug) {
+                pageRoot.innerHTML = renderNotFound(null);
+                return;
+            }
+
+            const doc = getDocBySlug(slug);
+
+            if (!doc) {
+                navTitle.textContent = 'Not Found';
+                pageRoot.innerHTML = renderNotFound(slug);
+                return;
+            }
+
+            // Update page title
+            document.title = `${doc.title} | Engineering Lab | Kaushal`;
+            navTitle.textContent = doc.title;
+
+            // Render layout
+            const tocHtml = renderToc(doc.sections);
+            const headerHtml = renderHeader(doc);
+            const sectionsHtml = doc.sections.map(renderSection).join('');
+            const metaHtml = renderMetaPanel(doc);
+            const mobileTocHtml = renderMobileToc(doc.sections);
+
+            pageRoot.innerHTML = `
+        <div class="doc-layout">
+          ${tocHtml}
+          <div class="doc-main">
+            ${mobileTocHtml}
+            ${headerHtml}
+            ${sectionsHtml}
+          </div>
+          ${metaHtml}
+        </div>
+      `;
+
+            // Init mermaid
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({
+                    startOnLoad: true,
+                    theme: isDark ? 'dark' : 'default',
+                    flowchart: { curve: 'basis' },
+                    securityLevel: 'loose'
+                });
+                mermaid.run();
+            }
+
+            initScrollSpy(doc.sections);
+            initMobileToc();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

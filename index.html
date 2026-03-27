@@ -328,6 +328,11 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
         }
 
         .btn-primary::before {
@@ -344,6 +349,7 @@
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 35px var(--shadow-medium);
+            color: #ffffff;
         }
 
         .btn-primary:hover::before {
@@ -358,6 +364,10 @@
             -webkit-backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
         .btn-outline::before {
@@ -372,7 +382,7 @@
         .btn-outline:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 35px var(--shadow-light);
-            color: white;
+            color: white !important;
         }
 
         .btn-outline:hover::before {
@@ -382,6 +392,27 @@
         .btn-outline span {
             position: relative;
             z-index: 1;
+        }
+
+        /* Lab link on project cards */
+        .lab-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.3rem 0.7rem;
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.06);
+            transition: all 0.2s ease;
+        }
+
+        .lab-link:hover {
+            background: rgba(99, 102, 241, 0.12);
+            border-color: var(--primary);
         }
 
         .floating-shapes {
@@ -455,7 +486,7 @@
 
     <header class="py-6 px-4 sm:px-10 glass-card sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold gradient-text">S. Kaushal Shanmugam</h1>
+            <h1 class="text-2xl font-bold gradient-text">S. Kaushal</h1>
             <nav class="hidden md:flex space-x-2">
                 <a href="#about"
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
@@ -467,6 +498,11 @@
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
                 <a href="certificates.html"
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Certificates</a>
+                <a href="lab.html"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold"
+                    style="position:relative">
+                    <i class="fas fa-flask" style="font-size:0.75em;margin-right:0.25rem"></i>Lab
+                </a>
                 <a href="#contact"
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
             </nav>
@@ -493,6 +529,9 @@
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
                 <a href="certificates.html"
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Certificates</a>
+                <a href="lab.html"
+                    class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400"><i
+                        class="fas fa-flask" style="font-size:0.75em;margin-right:0.3rem"></i>Lab</a>
                 <a href="#contact"
                     class="nav-link text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
             </div>
@@ -509,7 +548,6 @@
                 </div>
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
                     <span class="block text-slate-900 dark:text-white">S. Kaushal</span>
-                    <span class="block text-slate-900 dark:text-white">Shanmugam</span>
                 </h1>
                 <h2 class="text-2xl sm:text-3xl font-bold mb-6 gradient-text">
                     Full-Stack Developer & AI Enthusiast
@@ -879,29 +917,28 @@
                 <div class="project-card p-8 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-2xl font-bold text-slate-900 dark:text-white">LegitMind</h3>
-                        <div class="flex space-x-3">
-                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
-                                <i class="fab fa-github text-xl"></i>
+                        <div class="flex items-center space-x-3">
+                            <a href="lab-doc.html?doc=legitmind" class="lab-link">
+                                <i class="fas fa-flask"></i> Lab
                             </a>
                             <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
-                                <i class="fas fa-external-link-alt text-xl"></i>
+                                <i class="fab fa-github text-xl"></i>
                             </a>
                         </div>
                     </div>
                     <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
                         AI-powered platform for authentication, task automation, and smart workflows.
-                        Built with modern stack including React, Node.js, and advanced AI integration for seamless user
-                        experience.
+                        Built with React, Node.js, and context-based auth scoring.
                     </p>
                     <div class="mb-6">
                         <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
                         <ul class="space-y-2 text-slate-600 dark:text-slate-300">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI-powered
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI-assisted
                                 authentication</li>
                             <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Smart
                                 workflow automation</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Real-time
-                                task management</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Context-based
+                                confidence scoring</li>
                         </ul>
                     </div>
                     <div class="flex flex-wrap gap-2">
@@ -912,7 +949,7 @@
                         <span
                             class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">AI/ML</span>
                         <span
-                            class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Authentication</span>
+                            class="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm">Auth</span>
                     </div>
                 </div>
 
@@ -920,28 +957,28 @@
                 <div class="project-card p-8 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Learning.AI</h3>
-                        <div class="flex space-x-3">
-                            <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
-                                <i class="fab fa-github text-xl"></i>
+                        <div class="flex items-center space-x-3">
+                            <a href="lab-doc.html?doc=learning-ai" class="lab-link">
+                                <i class="fas fa-flask"></i> Lab
                             </a>
                             <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
-                                <i class="fas fa-external-link-alt text-xl"></i>
+                                <i class="fab fa-github text-xl"></i>
                             </a>
                         </div>
                     </div>
                     <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
-                        MERN-based learning platform with SHA-256 encryption, secured sessions, dynamic MCQs,
-                        AI-driven explanations, and comprehensive user dashboard for enhanced learning experience.
+                        MERN-based learning platform with adaptive quizzes, document-to-quiz pipeline,
+                        AI-driven explanations, and an admin exam system with proctoring hooks.
                     </p>
                     <div class="mb-6">
                         <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
                         <ul class="space-y-2 text-slate-600 dark:text-slate-300">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> SHA-256
-                                encryption</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> AI-driven
-                                explanations</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Dynamic MCQ
-                                system</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Adaptive quiz
+                                engine</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Document →
+                                quiz pipeline</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> XP +
+                                leaderboard system</li>
                         </ul>
                     </div>
                     <div class="flex flex-wrap gap-2">
@@ -960,7 +997,10 @@
                 <div class="project-card p-8 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-2xl font-bold text-slate-900 dark:text-white">ReadMind</h3>
-                        <div class="flex space-x-3">
+                        <div class="flex items-center space-x-3">
+                            <a href="lab-doc.html?doc=readmind-architecture" class="lab-link">
+                                <i class="fas fa-flask"></i> Lab
+                            </a>
                             <a href="https://github.com/Kaushal-15/reader" target="_blank"
                                 class="text-slate-500 hover:text-indigo-600 transition-colors">
                                 <i class="fab fa-github text-xl"></i>
@@ -972,8 +1012,8 @@
                         </div>
                     </div>
                     <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
-                        Online book reader with AI summarization, intelligent word explanations, interactive notes,
-                        flashcards, and MCQs for enhanced reading comprehension and learning.
+                        Online book reader with AI summarization, word explanations, interactive notes,
+                        flashcards, and MCQs — turns passive reading into active recall.
                     </p>
                     <div class="mb-6">
                         <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
@@ -1001,38 +1041,40 @@
                 <!-- Smart Home Technologies Project -->
                 <div class="project-card p-8 rounded-2xl">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Smart Home Technologies</h3>
-                        <div class="flex space-x-3">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Smart Home Tech</h3>
+                        <div class="flex items-center space-x-3">
+                            <a href="lab-doc.html?doc=smart-home-tech" class="lab-link">
+                                <i class="fas fa-flask"></i> Lab
+                            </a>
                             <a href="#" class="text-slate-500 hover:text-indigo-600 transition-colors">
                                 <i class="fab fa-github text-xl"></i>
                             </a>
                         </div>
                     </div>
                     <p class="text-lg text-slate-600 dark:text-slate-300 mb-6">
-                        Digital Solutions for the patients using physiotheraphy via the help of the Technology and
-                        Tools..
+                        Healthcare monitoring platform built during internship. Real-time patient vitals tracking,
+                        role-based access for doctors/patients/admin, deployed on AWS EC2 with Docker.
                     </p>
                     <div class="mb-6">
                         <h4 class="font-semibold text-slate-900 dark:text-white mb-3">Key Features:</h4>
                         <ul class="space-y-2 text-slate-600 dark:text-slate-300">
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Smart
-                                automation</li>
                             <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Real-time
-                                monitoring</li>
-                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Security
-                                integration</li>
+                                vitals monitoring</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Role-based
+                                access control</li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Docker + AWS
+                                EC2 deployment</li>
                         </ul>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <span
                             class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">React.js</span>
                         <span
-                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Attractive
-                            dashboards</span>
+                            class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm">Node.js</span>
                         <span
-                            class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm">Security</span>
+                            class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm">AWS</span>
                         <span
-                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">Automation</span>
+                            class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm">Docker</span>
                     </div>
                 </div>
             </div>
@@ -1160,26 +1202,26 @@
                                 class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full
                                 Name</label>
                             <input type="text" id="name" name="name" required
-                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                                class="w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="email"
                                 class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email
                                 Address</label>
                             <input type="email" id="email" name="email" required
-                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                                class="w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="subject"
                                 class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Subject</label>
                             <input type="text" id="subject" name="subject" required
-                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all">
+                                class="w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="message"
                                 class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Message</label>
                             <textarea id="message" name="message" rows="5" required
-                                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white bg-white/50 backdrop-blur-sm transition-all resize-none"></textarea>
+                                class="w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none"></textarea>
                         </div>
                         <button type="submit"
                             class="w-full btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg">
