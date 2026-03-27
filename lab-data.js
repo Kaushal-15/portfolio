@@ -113,7 +113,7 @@ There are both old and new progress routes still running side by side. Some rout
             {
                 id: "bottlenecks",
                 title: "Bottlenecks & Weak Spots",
-                content: `**The real ones, not the polished list:**
+                content: `**The Fixes to be done in next Version**
 
 1. **Feature pile in examController.js** — too much in one controller. Exam creation, session lifecycle, adaptive routing, analytics, and proctoring all live there.
 
