@@ -7,12 +7,12 @@ const LAB_DOCS = [
         title: "Learning.ai",
         category: "Backend",
         categoryColor: "indigo",
-        tags: ["Node.js", "React", "MongoDB", "Groq", "Gemini", "JWT", "Adaptive Quiz"],
+        tags: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "Adaptive Quiz"],
         summary: "Full-stack learning platform: roadmaps, adaptive quizzes, document-to-quiz pipeline, and an exam subsystem with proctoring hooks.",
         readTime: "12 min read",
         lastUpdated: "March 2025",
         links: {
-            github: "https://github.com/Kaushal-15",
+            github: "https://github.com/Kaushal-15/Learning.AI",
             demo: null,
         },
         sections: [
@@ -149,263 +149,143 @@ There are both old and new progress routes still running side by side. Some rout
     },
 
     {
-        slug: "legitmind",
-        title: "LegitMind",
-        category: "Backend",
-        categoryColor: "amber",
-        tags: ["Node.js", "React", "AI Auth", "Workflow Automation", "MongoDB"],
-        summary: "AI-powered authentication and workflow automation platform. Handles smart task routing, session management, and AI-driven decision logic.",
-        readTime: "8 min read",
-        lastUpdated: "March 2025",
-        links: {
-            github: "https://github.com/Kaushal-15",
-            demo: null,
-        },
-        sections: [
-            {
-                id: "overview",
-                title: "Overview",
-                content: `LegitMind is a platform built around AI-assisted authentication and workflow automation. The core idea: instead of static rule-based auth flows, decisions adapt based on user context and behavior signals.
-
-The backend handles auth, task routing, and state management. The frontend is a React dashboard for managing workflows, viewing task history, and configuring automation rules.`
-            },
-            {
-                id: "problem",
-                title: "Problem",
-                content: `Standard auth systems are binary — authenticated or not. Real workflows need more nuance: is this user's behavior consistent? Does this action fit their typical pattern? Should this request be flagged or auto-approved?
-
-The goal was to build a system where auth decisions factor in context, not just credentials. Alongside that, the workflow automation layer needed to route tasks based on those signals.`
-            },
-            {
-                id: "architecture",
-                title: "Architecture",
-                content: `**Stack:** React (frontend), Node.js + Express (backend), MongoDB (data store).
-
-**Auth layer:** JWT-based with an additional signal scoring step. On each request, a lightweight context check runs — device, IP range, session age, request pattern — and returns a confidence score. Below threshold triggers step-up auth.
-
-**Workflow engine:** Tasks are stored as state machines. Each node has entry conditions and transition rules. The AI layer provides a "should_proceed" signal based on user context and task history.`
-            },
-            {
-                id: "tech-stack",
-                title: "Tech Stack",
-                items: [
-                    { label: "Frontend", value: "React, Tailwind CSS" },
-                    { label: "Backend", value: "Node.js, Express" },
-                    { label: "Database", value: "MongoDB" },
-                    { label: "Auth", value: "JWT, context scoring middleware" },
-                    { label: "AI", value: "Groq / Gemini for decision signals" },
-                ]
-            },
-            {
-                id: "bottlenecks",
-                title: "Bottlenecks",
-                content: `The context scoring runs synchronously on every request. At volume, that's a bottleneck. The right fix is async scoring with cached results — not implemented yet.
-
-The workflow state machine is simple right now. Complex branching (parallel paths, conditional merges) isn't supported. That would need a proper DAG engine, not the current linear node structure.
-
-Auth confidence scoring is heuristic-based. There's no actual trained model behind it — it's a set of weighted rules. Works for demo, wouldn't hold up to adversarial inputs.`
-            },
-            {
-                id: "improvements",
-                title: "What I'd Change",
-                content: `- Move context scoring to async middleware with Redis-cached results per session
-- Replace the heuristic confidence model with a trained behavioral anomaly detector
-- Add proper workflow branching support — DAG over the current linear chain
-- Add an audit trail UI so admins can see why a request was flagged or passed
-- Currently no rate limiting on the step-up auth endpoint — that needs fixing`
-            }
-        ]
-    },
-
-    {
-        slug: "readmind-architecture",
-        title: "ReadMind — Architecture",
+        slug: "url-shortener-design",
+        title: "URL Shortener — System Design",
         category: "System Design",
         categoryColor: "emerald",
-        tags: ["System Design", "AI", "Node.js", "MongoDB", "Document Processing", "REST API"],
-        summary: "Architecture breakdown of ReadMind — an AI-powered reading assistant that extracts, chunks, and quizzes from uploaded documents.",
-        readTime: "10 min read",
-        lastUpdated: "March 2025",
+        tags: ["System Design", "Node.js", "Redis", "API Design", "High Availability", "High Level Design [HLD]"],
+        summary: "A scalable, highly available URL shortening service designed to handle millions of redirects with minimal latency while prioritizing system reliability over strict consistency.",
+        readTime: "8 min read",
+        lastUpdated: "March 2026",
         links: {
-            github: "https://github.com/Kaushal-15/reader",
-            demo: "https://kaushal-15.github.io/reader/",
-        },
-        sections: [
-            {
-                id: "overview",
-                title: "Overview",
-                content: `ReadMind is a document intelligence tool: users upload PDFs or Word documents, the system extracts and chunks the content, generates summaries and quiz questions using an LLM, and lets users test understanding through an adaptive quiz session.
-
-The core idea is converting passive reading into active recall — upload a doc, get quizzed on it.`
-            },
-            {
-                id: "problem",
-                title: "Problem",
-                content: `Reading long documents is passive. Retention drops fast without active recall. Existing tools either summarize (passive) or quiz on their own content (not yours).
-
-The gap: no clean tool that takes *your* documents and generates MCQs from them automatically — while also tracking which concepts you're weak on.`
-            },
-            {
-                id: "architecture",
-                title: "Architecture",
-                content: `**Simplified flow:**
-
-\`\`\`
-User → Upload File
-     → Backend extracts text (pdf-parse / mammoth)
-     → Text chunked into segments (~500 tokens each)
-     → Chunks stored in MongoDB (Chunk collection)
-     → User requests quiz
-     → Backend retrieves chunks, concatenates, sends to LLM
-     → Quiz stored and returned
-     → User answers questions
-     → Session stored with per-question results
-\`\`\`
-
-**Data model:**
-- **Document** — upload metadata (user, filename, type, status)
-- **Chunk** — extracted text segments linked to Document
-- **Quiz** — session linked to Document + User, embeds question state
-- **QuizAttempt** — per-answer record for weak-spot tracking`,
-                diagram: {
-                    type: "mermaid",
-                    code: `flowchart LR
-    U[User] --> Upload[Upload Document]
-    Upload --> Extract[Text Extraction]
-    Extract --> Chunk[Chunking Service]
-    Chunk --> Store[(MongoDB Chunks)]
-    U --> RequestQuiz[Request Quiz]
-    RequestQuiz --> Retrieve[Retrieve Chunks]
-    Store --> Retrieve
-    Retrieve --> LLM[Groq / Gemini]
-    LLM --> QuizDB[(Quiz Store)]
-    QuizDB --> U`
-                }
-            },
-            {
-                id: "api-structure",
-                title: "API Structure",
-                content: `\`\`\`
-POST   /api/documents/upload        — multer + extraction + chunking
-GET    /api/documents               — list user's documents
-DELETE /api/documents/:id           — delete doc + chunks
-
-POST   /api/quiz/generate/:docId    — trigger quiz generation
-GET    /api/quiz/:id                — get quiz questions
-POST   /api/quiz/:id/answer         — submit per-question answer
-GET    /api/quiz/:id/results        — final results + weak areas
-\`\`\``
-            },
-            {
-                id: "bottlenecks",
-                title: "Bottlenecks",
-                content: `**Naive chunk concatenation:** All chunks joined and sent in one prompt. For a 50-page PDF this blows past context limits. Questions end up only covering the first portion of the document — the truncation is silent.
-
-**No retrieval:** No semantic search over chunks. A proper approach embeds chunks, indexes them, and retrieves only relevant ones based on the topic. Current approach treats the whole doc as one blob.
-
-**Blocking extraction:** PDF extraction blocks the request. For large files this causes timeouts. Should be async/queued.
-
-**Local file storage:** uploads/ directory doesn't survive Vercel or any stateless hosting.`,
-                highlight: {
-                    type: "warning",
-                    text: "The core bottleneck is missing retrieval. Without it, quiz quality degrades for anything longer than ~10 pages and context limits become a hard ceiling."
-                }
-            },
-            {
-                id: "improvements",
-                title: "What I'd Change in V2",
-                content: `- **Add retrieval:** Embed chunks, store vectors (Pinecone or pgvector), retrieve by semantic similarity before prompting
-- **Queue the pipeline:** BullMQ for async extraction + chunking. Return job ID, let client poll.
-- **Object storage:** S3 or Cloudflare R2 instead of local disk
-- **JSON validation:** Strict schema check on LLM response before storing — reject and retry once if invalid
-- **Deduplication:** Hash on upload, skip reprocessing if content hash already exists for that user`
-            }
-        ]
-    },
-
-    {
-        slug: "smart-home-tech",
-        title: "Smart Home Tech — Healthcare Platform",
-        category: "Backend",
-        categoryColor: "indigo",
-        tags: ["MERN", "JWT Auth", "AWS EC2", "Docker", "CI/CD", "Healthcare", "IoT"],
-        summary: "Full-stack healthcare monitoring platform built during internship. Real-time patient vitals tracking, role-based access, and device-to-cloud connectivity.",
-        readTime: "7 min read",
-        lastUpdated: "July 2025",
-        links: {
-            github: "https://github.com/Kaushal-15",
+            github: null,
             demo: null,
         },
         sections: [
             {
                 id: "overview",
                 title: "Overview",
-                content: `Built during a 3-month internship at Smart Home Healthcare Solutions. The platform lets healthcare professionals and patients monitor vitals remotely — real-time data from edge devices flowing up to a cloud-hosted dashboard.
-
-Stack: React + Tailwind (frontend), Node.js + Express (backend), MongoDB (data store), deployed on AWS EC2 with Docker and a CI/CD pipeline.`
+                content: `A classic distributed systems problem: designing a URL shortener that maps long URLs to short aliases. As an AI-analyzed architecture, the primary objective is to guarantee seamless redirection while maintaining a tiny footprint per URL. The system operates under heavy read loads, serving redirects on demand while keeping write operations localized and fully asynchronous to ensure at least 99.9% availability.In short in a Real Interview the URL Shortner might seem easy but every API design and High Level Design matters and how you express them in that terms,here i have added a sample to it on my experiences on reading blogs and Articles.`
             },
             {
                 id: "problem",
-                title: "Problem",
-                content: `Physiotherapy and remote patient monitoring traditionally requires in-person visits or proprietary hardware with locked-down software. The goal was a platform that could receive data from generic IoT/edge devices and expose it through a clean interface for both clinicians and patients.
+                title: "Problem & Constraints",
+                content: `The system must provide very fast redirection, ideally responding within **10–100 ms** to ensure a smooth user experience. It should be highly available — if the service goes down, all shortened links stop working, which makes availability strictly more vital than strong consistency.
 
-Doctors needed role-gated dashboards with patient lists and alert thresholds. Patients needed a simple vitals view with history. Admin needed device management and user provisioning.`
+**Traffic Projections:**
+The system should scale effortlessly to handle a massive baseline of requests:
+- **~100 million reads** (redirects) per day.
+- **~10 million writes** (creations) per day.
+
+This **10:1** read-to-write ratio heavily informs our caching and replication strategies.`
             },
             {
                 id: "architecture",
-                title: "Architecture",
-                content: `**Frontend:** React 18 + Tailwind CSS. Three distinct dashboard views based on role (admin, doctor, patient). Data polling every 30 seconds — no WebSocket, which was a shortcut that became noticeable with live vitals.
+                title: "High Level Design (HLD)",
+                content: `**Core Architecture:**
 
-**Backend:** Express REST API. Role-based middleware on every protected route. Device data hits a public ingest endpoint, gets sanitized, then stored.
+1. **API Gateway:** Entry point handling rate limiting and routing.
+2. **Short URL Generator (Write Path):** Assigns unique slugs. Uses an isolated Key Generation Service (Base62 encoding on pre-generated UUIDs/Counters) to prevent collision overhead on the DB.
+3. **Redirection Service (Read Path):** Fast lookups fetching from Cache first, falling back to the DB on misses.
+4. **Data Store:** NoSQL (Cassandra/DynamoDB) for highly scalable, key-value style fast reads.
+5. **Cache Tier:** Redis or Memcached clusters caching heavily trafficked short-links.
 
-**Auth:** JWT with roles embedded in token claims. Refresh token stored in HttpOnly cookie. Role check is middleware-level, not per-resource — so role escalation edge cases weren't handled cleanly.
+**Write Flow:** User submits long URL → Rate Limiter checks limits → Shortener generates slug → Stores mapping in DB → Returns short URL.
 
-**Deployment:** AWS EC2 (single instance), Docker Compose for service isolation (frontend + backend), Nginx as reverse proxy. CI/CD via GitHub Actions — push to main triggers build and deploy.`,
+**Read Flow:** User clicks short URL → Gateway routes to Redirection Service → Cache lookup (if misses: DB lookup & Cache update) → 301/302 Redirect to Long URL.`,
                 diagram: {
                     type: "mermaid",
                     code: `flowchart TD
-    Dev[Device / IoT] --> Ingest[/api/ingest]
-    Patient[Patient] --> FE[React Frontend]
-    Doctor[Doctor] --> FE
-    Admin[Admin] --> FE
-    FE --> API[Express API]
-    API --> Auth{Role Check}
-    Auth --> MDB[(MongoDB)]
-    API --> Ingest
-    Ingest --> MDB`
+    U[User] --> |POST /api/v1/urls| API[API Gateway / Load Balancer]
+    U --> |GET /:slug| API
+    
+    API --> |Write Request| WS[URL Generation Service]
+    API --> |Read Request| RS[Redirection Service]
+    
+    WS --> |Check Collision / Generate| ZK[Key Generation Service]
+    WS --> |Insert| DB[(Cassandra DB)]
+    
+    RS --> |Cache Lookup| Cache[(Redis Cluster)]
+    RS --> |Cache Miss Lookup| DB
+    Cache -.-> |Return Mapping| RS
+    
+    DB -.-> |Async Replicate| Cache
+    
+    subgraph Storage Tier
+        Cache
+        DB
+    end`
                 }
             },
             {
-                id: "tech-stack",
-                title: "Tech Stack",
-                items: [
-                    { label: "Frontend", value: "React 18, Tailwind CSS" },
-                    { label: "Backend", value: "Node.js, Express" },
-                    { label: "Database", value: "MongoDB" },
-                    { label: "Auth", value: "JWT, refresh tokens, role-based middleware" },
-                    { label: "Deployment", value: "AWS EC2, Docker Compose, Nginx, GitHub Actions" },
-                    { label: "Monitoring", value: "Basic CloudWatch, no APM" },
-                ]
+                id: "api-design",
+                title: "API Design",
+                content: `**1. Create Short URL**
+
+\`\`\`http
+POST /api/v1/urls
+{
+  "LongUrl": "https://www.amazon.com/some-product-url",
+  "custom_name": "optional",
+  "expiration": "optional"
+}
+\`\`\`
+
+**Response (201 Created):**
+\`\`\`json
+{
+  "shortUrl": "tiny.url/12345678"
+}
+\`\`\`
+
+**Error Codes:** 
+- \`400 Bad Request\`: Invalid URL body.
+- \`409 Conflict\`: Custom alias already taken.
+- \`429 Too Many Requests\`: Global or IP-based rate limit exceeded.
+- \`500 Internal Server Error\`
+
+**2. Redirect to Long URL**
+
+\`\`\`http
+GET /:slug
+\`\`\`
+
+**Response (301/302 Redirect):** 
+\`\`\`http
+HTTP 301 (or 302) Redirect
+Location: https://www.amazon.com/some-product-url
+\`\`\`
+
+*Note: Using **301 Moved Permanently** allows browser caching (faster UX, less server load) while **302 Found** forces a server trip every time (better analytics tracking).*
+
+**Error Codes:**
+- \`404 Not Found\`: Slug does not exist.
+- \`410 Gone\`: The link existed but has since expired or been deleted.
+- \`429 Too Many Requests\`
+- \`500 Internal Server Error\``
             },
             {
-                id: "bottlenecks",
-                title: "Bottlenecks",
-                content: `Polling instead of WebSocket is the main UX problem. 30-second polling makes the "real-time" label feel dishonest for vitals. The fix is straightforward (Socket.io), just wasn't scoped into the internship timeline.
+                id: "bottbottlenecks",
+                title: "Bottlenecks & Edge Cases",
+                content: `**Slug Collision:** Random generation poses collision risks at scale. Generating slugs offline through an isolated Key Generation Service (KGS) completely eliminates latency and DB contention.
+                
+**Cache Eviction:** Given 100M daily reads, cache memory is finite. We deploy an LRU (Least Recently Used) policy to flush dormant URLs and prioritize hot links.
 
-Single EC2 instance with no load balancing. If the instance goes down, the whole platform is down. For an internal prototype this was acceptable; for production it isn't.
-
-The device ingest endpoint is unauthenticated — any POST with a valid device ID format gets stored. There's no device key / token validation. It was flagged but deprioritized.
-
-Data archival isn't implemented. Vitals accumulate forever in MongoDB. A read-heavy dashboard querying all records for a patient history is going to slow down as records grow.`
+**Malicious Activity:** URL shorteners are prime targets for spam. We must execute deep URL validation, maintain blocklists, and implement distributed rate limiting at the API Gateway level to thwart bot networks.`,
+                highlight: {
+                    type: "warning",
+                    text: "The primary design failure point is usually token exhaustion or DB locking when generating slugs sequentially. Pre-allocating ranges using a service like ZooKeeper is the safest architectural pattern."
+                }
             },
+
             {
-                id: "improvements",
-                title: "What I'd Change",
-                content: `- Replace polling with WebSocket (Socket.io) for live vitals — should have been built this way from the start
-- Add device authentication — secret key per device, validated on ingest
-- Set up a proper alert system — threshold breach triggers a notification, not just a visual indicator
-- Add MongoDB TTL index on raw vitals and aggregate into hourly/daily summaries for historical views
-- Move to multi-instance with a load balancer before any real patient load`
+                id: "Summary",
+                title: "Summary",
+                content: `The Url shortner Design is a classical medium level problem.The system should scale both vertically and horizontally for Robust access.
+                **R/W Ratio:**The read are more higher than Writes so that ratio between them is 10:1
+                **Availability:**Availability is more important than consistency,the system should be available 24/7
+                **Scalability:**The system should be able to handle millions of requests per day,this is most important part of the system ensure it works properly
+                **Latency:**The system should be able to handle requests in milliseconds`,
             }
         ]
     }
